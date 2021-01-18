@@ -44,10 +44,10 @@ func DrawMarker(info MarkerInfo) error {
 	bitIndex := 7
 	for dy := info.BorderSize; dy < slideCount-info.BorderSize; dy++ {
 		for dx := info.BorderSize; dx < slideCount-info.BorderSize; dx++ {
-			//fmt.Println(currentByte, byteIndex, bitIndex)
+			fmt.Println(currentByte, byteIndex, bitIndex)
 			if (currentByte & (0x1 << bitIndex)) != 0 {
 				drawBox(img, dx*boxSize, dy*boxSize, boxSize, color.White)
-				//fmt.Println("set 1")
+				fmt.Println("set 1")
 			}
 			if bitIndex == 0 {
 				byteIndex++
@@ -55,7 +55,11 @@ func DrawMarker(info MarkerInfo) error {
 					break
 				}
 				currentByte = info.Data[byteIndex]
-				bitIndex = 7
+				if (byteIndex+1)*8 > info.MarkerSize*info.MarkerSize {
+					bitIndex = (byteIndex+1)*8 - info.MarkerSize*info.MarkerSize - 1
+				} else {
+					bitIndex = 7
+				}
 			} else {
 				bitIndex--
 			}
